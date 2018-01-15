@@ -7,22 +7,26 @@ using std:: cin;
 using std:: vector;
 
 void entrada_de_dados (struct usuario*); // entrada dos dados do usuário
-void tempo_manha (); //cálculo do tempo trabalhado de manhã
-void min_entrada_manha (); //conversão da hora de entrada da manhã em minutos
-void min_saida_manha (); //conversão da hora de saída da manhã em minutos
-void tempo_tarde (); //cálculo do tempo trabalhado de tarde
-void min_entrada_tarde (); //conversão da hora de entrada da tarde em minutos
-void min_saida_tarde (); //conversão da hora de saída da tarde em minutos
+int calc_tempo_manha (int,struct usuario*); //cálculo do tempo trabalhado de manhã
+int calc_atraso_manha (int, struct usuario*); //cálculo do atraso de manhã
+int min_entrada_manha (int, struct usuario*); //conversão da hora de entrada da manhã em minutos
+int min_saida_manha (int, struct usuario*); //conversão da hora de saída da manhã em minutos
+int calc_tempo_tarde (int, struct usuario*); //cálculo do tempo trabalhado de tarde
+int calc_atraso_tarde (int, struct usuario*); //cálculo do atraso de tarde
+int min_entrada_tarde (int, struct usuario*); //conversão da hora de entrada da tarde em minutos
+int min_saida_tarde (int, struct usuario*); //conversão da hora de saída da tarde em minutos
 void calculo (); // cálculo total de horas
-void impressao (); //impressão dos dados na tela
+void impressao (struct usuario*); //impressão dos dados na tela
 
 struct cartao_de_ponto
 {
     int dia; //Dia
-    int em; // Horário de entrada da manhã
-    int sm; //Horário de saída da manhã
-    int et; //Horário de entrada da tarde
-    int st; //Horário de saída da tarde
+    int entrada_manha; // Horário de entrada da manhã
+    int saida_manha; //Horário de saída da manhã
+    int entrada_tarde; //Horário de entrada da tarde
+    int saida_tarde; //Horário de saída da tarde
+    int total_horas_dia;
+    int total_atraso_dia;
 };
 
 struct usuario
@@ -85,15 +89,15 @@ void entrada_de_dados (struct usuario *user)
         {
             teste = true;
             
-            cin >> user.cartao[cont].dia;
+            cin >> user->cartao[cont].dia;
             
-            if ( user.cartao[cont].dia < 1 )
+            if ( user->cartao[cont].dia < 1 )
                 {
                     teste = false;
                     
                     cout << "Data inválida. Insira o dia do cartão de ponto: ";
                 }
-                else    if ( user.cartao[cont].dia > 31 )
+                else if ( user->cartao[cont].dia > 31 )
                 {
                     teste = false;
                     
@@ -102,17 +106,17 @@ void entrada_de_dados (struct usuario *user)
 
         }
 
-        cout << "Horário de entrada da manhã (DIA " << user.cartao[cont].dia <<"): ";
-        cin >> *user.cartao[cont].em;
+        cout << "Horário de entrada da manhã (DIA " << user->cartao[cont].dia <<"): ";
+        cin >> user->cartao[cont].entrada_manha;
         
-        cout << "Horário de saída da manhã (DIA " << user.cartao[cont].dia <<"): ";
-        cin >> user.cartao[cont].sm;
+        cout << "Horário de saída da manhã (DIA " << user->cartao[cont].dia <<"): ";
+        cin >> user->cartao[cont].saida_manha;
         
-        cout << "Horário de entrada da tarde (DIA " << user.cartao[cont].dia <<"): ";
-        cin >> user.cartao[cont].et;
+        cout << "Horário de entrada da tarde (DIA " << user->cartao[cont].dia <<"): ";
+        cin >> user->cartao[cont].entrada_tarde;
         
-        cout << "Horário de saída da tarde (DIA " << user.cartao[cont].dia <<"): ";
-        cin >> user.cartao[cont].st;
+        cout << "Horário de saída da tarde (DIA " << user->cartao[cont].dia <<"): ";
+        cin >> user->cartao[cont].saida_tarde;
         
         cout << "Deseja entrar com uma nova data? ( S / N )";
         cin >> escolha;
@@ -127,105 +131,138 @@ void entrada_de_dados (struct usuario *user)
     }
 }
 
-void tempo_manha ()
+int calc_tempo_manha (int i, struct usuario *user)
 {
-    min_entrada_manha ( );
-    min_saida_manha ( );
-    tm = ms - me;
+    int me;
+    int ms;
+    
+    me = min_entrada_manha (i, user);
+    ms = min_saida_manha (i, user);
+    return ms - me;
+}
+
+int calc_atraso_manha (int i, struct usuario *user)
+{
+    int me;
+    
+    me = min_entrada_manha (i, user);
     if ( me > 480 )
     {
-       am = me - 480;
+       return me - 480;
     }
-    else am = 0;
+    else return 0;
 }
 
-void min_entrada_manha ()
+int min_entrada_manha (int i, struct usuario *user)
 {
-    me = ( cartao[i].em / 100 ) * 60 + ( cartao[i].em % 100 );
+    return ( user->cartao[i].entrada_manha / 100 ) * 60 + ( user->cartao[i].entrada_manha % 100 );
 }
 
-void min_saida_manha ()
+int min_saida_manha (int i, struct usuario *user)
 {
-    ms = ( cartao[i].sm / 100 ) * 60 + ( cartao[i].sm % 100 );
+    return ( user->cartao[i].saida_manha / 100 ) * 60 + ( user->cartao[i].saida_manha % 100 );
 }
 
-void tempo_tarde ()
+int calc_tentrada_manhapo_tarde (int i, struct usuario *user)
 {
-    min_entrada_tarde ( );
-    min_saida_tarde ( );
-    tt = ms - me;
+    int me;
+    int ms;
+    
+    me = min_entrada_tarde (i, user);
+    ms = min_saida_tarde (i, user);
+    return ms - me;
+}
+
+int calc_atraso_tarde (int i, struct usuario *user)
+{
+    int me;
+    
+    me = min_entrada_tarde (i, user);
     if ( me > 840 )
     {
-        at = me - 840;
+       return me - 840;
     }
-    else  at:= 0;
+    else return 0;
 }
 
-void min_entrada_tarde ()
+int min_entrada_tarde (int i, struct usuario *user)
 {
-    me = ( cartao[i].et / 100 ) * 60 + ( cartao[i].et % 100 );
+    return ( user->cartao[i].entrada_tarde / 100 ) * 60 + ( user->cartao[i].entrada_tarde % 100 );
 }
 
-void min_saida_tarde ()
+int min_saida_tarde (int i, struct usuario *user)
 {
-    ms = ( cartao[i].st / 100 ) * 60 + ( cartao[i].st % 100 );
+    return ( user->cartao[i].saida_tarde / 100 ) * 60 + ( user->cartao[i].saida_tarde % 100 );
 }
 
-void calculo ()
+void calculo (struct usuario *user)
 {
+    int atraso_manha;
+    int atraso_tarde;
+    int horas_manha;
+    int horas_tarde;
+    int total_horas_mes;
+    int total_atrasos_mes;
+    double media_horas;
+    double media_atrasos;
+    
     for ( int i = 1; i < cont; i++ )
     {
-        tempo_manha;
-        tempo_tarde;
-        total_dia[i].atrasos = am + at;
-        total_dia[i].horas = tm + tt;
-        total_horas += total_dia[i].horas;
-        total_atrasos += total_dia[i].atrasos;
+        horas_manha = calc_tempo_manha (i, user);
+        horas_tarde = calc_tempo_tarde (i, user);
+        atraso_manha = calc_atraso_manha (i, user);
+        atraso_tarde = calc_atraso_manha (i, user);         
+        
+        user->cartao[i].total_horas_dia = horas_manha + horas_tarde;
+        user->cartao[i].total_atraso_dia = atraso_manha + atraso_tarde;
+
+        total_horas_mes += user->cartao[i].total_horas_dia;
+        total_atrasos_mes += user->cartao[i].total_atraso_dia;
     }
 
-    media_horas = (total_horas) / (cont);
-    media_atrasos = (total_atrasos) / (cont);
+    media_horas = total_horas_mes / (cont);
+    media_atrasos = total_atrasos_mes / (cont);
 }
 
-void impressao ()
+void impressao (struct usuario *user)
 {
     cout << "RELATÓRIO DE PONTO DO MÊS \n";
     
     for ( int i = 1; i < cont; i++ )
     {
-        cout << "DIA " << cartao[i].dia << "\n";
+        cout << "DIA " << user->cartao[i].dia << "\n";
         
-        if (cartao[i].em % 100) < 10
+        if (user->cartao[i].entrada_manha) % 100 < 10
         {
-            cout << "Entrada Manhã: " << (cartao[i].em / 100) << ":0" << (cartao[i].em % 100) << "\n";
+            cout << "Entrada Manhã: " << (user->cartao[i].entrada_manha / 100) << ":0" << (user->cartao[i].entrada_manha % 100) << "\n";
         }
-        else cout << "Entrada Manhã: " << (cartao[i].em / 100) << ":" << (cartao[i].em % 100)) << "\n";    
+        else cout << "Entrada Manhã: " << (user->cartao[i].entrada_manha / 100) << ":" << (user->cartao[i].entrada_manha % 100)) << "\n";    
             
-        If (cartao[i].sm % 100) < 10
+        If (user->cartao[i].saida_manha % 100) < 10
         {
-            cout << "Saída Manhã: " << (cartao[i].sm / 100) << ":0" << (cartao[i].sm % 100) << "\n";
+            cout << "Saída Manhã: " << (user->cartao[i].saida_manha / 100) << ":0" << (user->cartao[i].saida_manha % 100) << "\n";
         }
-        else cout << "Saída Manhã: " << (cartao[i].sm / 100) << ":" << (cartao[i].sm % 100) << "\n";
+        else cout << "Saída Manhã: " << (user->cartao[i].saida_manha / 100) << ":" << (user->cartao[i].saida_manha % 100) << "\n";
         
-        if (cartao[i].et % 100) < 10
+        if (user->cartao[i].entrada_tarde % 100) < 10
         {
-            cout << "Entrada Tarde: " << (cartao[i].et / 100) << ":0" << (cartao[i].et % 100) << "\n";
+            cout << "Entrada Tarde: " << (user->cartao[i].entrada_tarde / 100) << ":0" << (user->cartao[i].entrada_tarde % 100) << "\n";
         }
-        else cout << "Entrada Tarde: " << (cartao[i].et / 100) < ":" << (cartao[i].et % 100) << "\n";    
+        else cout << "Entrada Tarde: " << (user->cartao[i].entrada_tarde / 100) < ":" << (user->cartao[i].entrada_tarde % 100) << "\n";    
         
-        if (cartao[i].st % 100) < 10
+        if (user->cartao[i].saida_tarde % 100) < 10
         {
-            cout << "Saída Tarde: " << (cartao[i].st / 100) << ":0" << (cartao[i].st % 100) << "\n";
+            cout << "Saída Tarde: " << (user->cartao[i].saida_tarde / 100) << ":0" << (user->cartao[i].saida_tarde % 100) << "\n";
         }
-        else cout << "Saída Tarde: " << (cartao[i].st / 100) << ":" << (cartao[i].st % 100) << "\n";
+        else cout << "Saída Tarde: " << (user->cartao[i].saida_tarde / 100) << ":" << (user->cartao[i].saida_tarde % 100) << "\n";
                 
-        if (total_dia[i].horas % 60) < 10
+        if (user->cartao[i].total_horas_dia % 60) < 10
         {
             cout << "Total de horas trabalhadas no dia: " << ((total_dia[i].horas) / 60) << "h0" << ((total_dia[i].horas) % 60) << "min" << "\n";
         }
         else cout << "Total de horas trabalhadas no dia: " << ((total_dia[i].horas) / 60) << "h" << ((total_dia[i].horas) % 60) << "min" << "\n";
         
-        if (total_dia[i].atrasos % 60) < 10
+        if (user->cartao[i].total_atrasos_dia % 60) < 10
         {
             cout << "Tempo de atraso no dia: " << ((total_dia[i].atrasos) / 60) << "h0" << ((total_dia[i].atrasos) % 60) << "min" << "\n";
         }
@@ -234,13 +271,13 @@ void impressao ()
 
     cout << "\n\n";
     
-    if (total_horas % 60) < 10
+    if (total_horas_mes % 60) < 10
     {
-        cout << "Tempo de atraso no mês: " << ((total_horas) / 60) << "h0" << ((total_horas) % 60) << "min \n";
+        cout << "Tempo de horas trabalhadas no mês: " << ((total_horas) / 60) << "h0" << ((total_horas) % 60) << "min \n";
     }
-    else cout << "Tempo de atraso no mês: " << ((total_horas) / 60) << "h" << ((total_horas) % 60) << "min \n";
+    else cout << "Tempo de horas trabalhadas no mês: " << ((total_horas) / 60) << "h" << ((total_horas) % 60) << "min \n";
     
-    if (total_atrasos % 60) < 10
+    if (total_atrasos_mes % 60) < 10
     {
         cout << "Tempo de atraso no mês: " << ((total_atrasos) / 60) << "h0" << ((total_atrasos) % 60) << "min \n";
     }
