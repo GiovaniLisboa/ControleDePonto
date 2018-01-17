@@ -17,8 +17,8 @@ int calc_tempo_tarde (int, struct usuario*); //cálculo do tempo trabalhado de t
 int calc_atraso_tarde (int, struct usuario*); //cálculo do atraso de tarde
 int min_entrada_tarde (int, struct usuario*); //conversão da hora de entrada da tarde em minutos
 int min_saida_tarde (int, struct usuario*); //conversão da hora de saída da tarde em minutos
-void calculo (int &, int &, int &, int &, struct usuario*); // cálculo total de horas
-void impressao (int &, int &, int &, int &, struct usuario*); //impressão dos dados na tela
+void calculo (int &, int &, double &, double &, struct usuario*); // cálculo total de horas
+void impressao (int &, int &, double &, double &, struct usuario*); //impressão dos dados na tela
 
 struct cartao_de_ponto
 {
@@ -46,24 +46,24 @@ int main(int argc, char **argv)
 {        
     int total_horas_mes;
     int total_atrasos_mes;
-    int media_horas;
-    int media_atrasos;
+    double media_horas;
+    double media_atrasos;
     
     cout << "Ol" << (char)160 << "! Bem-vindo(a) ao M" << (char)162 << "dulo de controle de ponto do Fab Lab Bel" << (char)130 << "m (Vers" << (char)132 << "o 1.0)\n\n";
     
-    usuario fab[20];
+    vector < usuario *> fab (20);
     
     int cod = gerar_cod();
     
     cout << "C" << (char)162 << "digo atribuido: fab[" << cod << "]\n\n";
     
-    cadastro (&fab[cod]);
+    cadastro (fab[cod]);
     
-    entrada_de_dados (&fab[cod]);
+    entrada_de_dados (fab[cod]);
     
-    calculo (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, &fab[cod]);
+    calculo (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fab[cod]);
     
-    impressao (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, &fab[cod]);
+    impressao (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fab[cod]);
 
     return 0;
 }
@@ -86,7 +86,7 @@ void cadastro (struct usuario *user)
     
     cout << "Diretoria onde atua: ";
     cin >> user->diretoria;
-    cout << "\n\n";
+    cout << "\n";
 }
 
 void entrada_de_dados (struct usuario *user)
@@ -99,7 +99,7 @@ void entrada_de_dados (struct usuario *user)
     {
         cont += 1;
         
-        cout << "Insira o dia do cart" << (char)132 << "o de ponto: ";
+        cout << "\nInsira o dia do cart" << (char)132 << "o de ponto: ";
 
         while ( teste == false )
         {
@@ -228,7 +228,7 @@ int min_saida_tarde (int i, struct usuario *user)
 }
 
 
-void calculo (int &total_h, int &total_a, int &media_h, int &media_a, struct usuario *user)
+void calculo (int &total_h, int &total_a, double &media_h, double &media_a, struct usuario *user)
 {
     int atraso_manha;
     int atraso_tarde;
@@ -253,7 +253,7 @@ void calculo (int &total_h, int &total_a, int &media_h, int &media_a, struct usu
     media_a = total_a / cont;
 }
 
-void impressao (int &total_h, int &total_a, int &media_h, int &media_a, struct usuario *user)
+void impressao (int &total_h, int &total_a, double &media_h, double &media_a, struct usuario *user)
 {
     cout << "\nRELAT" << (char)224 << "RIO DE PONTO DO M" << (char)210 << "S \n";
     cout << "Nome: " << user->nome << " " << user->sobrenome << "\n";
@@ -314,15 +314,15 @@ void impressao (int &total_h, int &total_a, int &media_h, int &media_a, struct u
     }
     else cout << "Tempo de atraso no m" << (char)136 << "s: " << ((total_a) / 60) << "h" << ((total_a) % 60) << "min \n";
     
-    if ((media_h % 60) < 10)
+    if (((int)media_h % 60) < 10)
     {
-        cout << "M" << (char)130 << "dia de horas trabalhadas por dia: " << ((media_h) / 60) << "h0" << ((media_h) % 60) << "min \n";
+        cout << "M" << (char)130 << "dia de horas trabalhadas por dia: " << (((int)media_h) / 60) << "h0" << (((int)media_h) % 60) << "min \n";
     }
-    else cout << "M" << (char)130 << "dia de horas trabalhadas por dia: " << ((media_h) / 60) << "h" << ((media_h) % 60) << "min \n";
+    else cout << "M" << (char)130 << "dia de horas trabalhadas por dia: " << (((int)media_h) / 60) << "h" << (((int)media_h) % 60) << "min \n";
     
-    if ((media_a % 60) < 10)
+    if (((int)media_a % 60) < 10)
     {
-        cout << "M" << (char)130 << "dia de atraso por dia: " << ((media_a) / 60) << "h0" << ((media_a) % 60) << "min \n";
+        cout << "M" << (char)130 << "dia de atraso por dia: " << (((int)media_a) / 60) << "h0" << (((int)media_a) % 60) << "min \n";
     }
-    else cout << "M" << (char)130 << "dia de atraso por dia: " << ((media_a) / 60) << "h" << ((media_a) % 60) << "min \n";
+    else cout << "M" << (char)130 << "dia de atraso por dia: " << (((int)media_a) / 60) << "h" << (((int)media_a) % 60) << "min \n";
 }
