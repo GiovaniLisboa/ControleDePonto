@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     cod = gerar_cod();
     
     cout << "C" << (char)162 << "digo atribuido: fab[" << cod << "]\n\n";
-    
+ 
     cadastro (fabber);
     
     entrada_de_dados (fabber);
