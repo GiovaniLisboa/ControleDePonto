@@ -1,3 +1,5 @@
+
+
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -61,7 +63,7 @@ int main(int argc, char **argv)
     
     calculo (media_horas, media_atrasos, fab[cod]);
     
-    impressao (media_horas, media_atrasos, &fab[cod]);
+    impressao (media_horas, media_atrasos, fab[cod]);
 
     return 0;
 }
