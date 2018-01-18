@@ -30,6 +30,7 @@ int cod;
 int cont = 0;
 
 int gerar_cod (); //Gerar ID de identificação
+void atribuir_endereco(vector< usuario* > &); 
 void cadastro(vector< usuario* > &); //cadastro dos dados do usuário
 void entrada_de_dados (vector< usuario* > &); // entrada dos dados do usuário
 int calc_tempo_manha (int, vector< usuario* > &); //cálculo do tempo trabalhado de manhã
@@ -52,7 +53,9 @@ int main(int argc, char **argv)
     
     cout << "Ol" << (char)160 << "! Bem-vindo(a) ao M" << (char)162 << "dulo de controle de ponto do Fab Lab Bel" << (char)130 << "m (Vers" << (char)132 << "o 1.0)\n\n";
     
-    vector < usuario * > fabber (20);
+    vector < struct usuario * > fabber (20);
+    
+    atribuir_endereco(fabber);
     
     cod = gerar_cod();
     
@@ -73,6 +76,15 @@ int gerar_cod ()
 {
     static int ID = 0;
     return ID++;
+}
+
+void atribuir_endereco (vector< usuario* > &user)
+{
+    static usuario fab [20];
+        for (int i = 0; i < 20; i++)
+    {
+        user[i] = &fab[i];
+    }
 }
 
 void cadastro (vector< usuario* > &user)
@@ -179,9 +191,9 @@ int calc_atraso_manha (int i, vector< usuario* > &user)
     int me;
     
     me = min_entrada_manha (i, user);
-    if ( me > 480 )
+    if ( me > 540 )
     {
-       return me - 480;
+       return me - 540;
     }
     else return 0;
 }

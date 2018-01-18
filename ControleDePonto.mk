@@ -5,18 +5,18 @@
 ## Debug
 ProjectName            :=ControleDePonto
 ConfigurationName      :=Debug
-WorkspacePath          :=C:/Users/201711140029.FACOMP/Documents/Giovani
-ProjectPath            :=C:/Users/201711140029.FACOMP/Documents/Giovani/ControleDePonto
+WorkspacePath          :="C:/Users/giova/Documents/Projetos C++/PrimeiroProjeto"
+ProjectPath            :="C:/Users/giova/Documents/Projetos C++/PrimeiroProjeto/ControleDePonto"
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
-User                   :=201711140029
+User                   :=giova
 Date                   :=17/01/2018
 CodeLitePath           :="C:/Program Files/CodeLite"
-LinkerName             :="C:/Program Files (x86)/CodeBlocks/MinGW/bin/g++.exe"
-SharedObjectLinkerName :="C:/Program Files (x86)/CodeBlocks/MinGW/bin/g++.exe" -shared -fPIC
+LinkerName             :=C:/TDM-GCC-64/bin/g++.exe
+SharedObjectLinkerName :=C:/TDM-GCC-64/bin/g++.exe -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -36,7 +36,7 @@ ObjectsFileList        :="ControleDePonto.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=makedir
 RcCmpOptions           := 
-RcCompilerName         :="C:/Program Files (x86)/CodeBlocks/MinGW/bin/windres.exe"
+RcCompilerName         :=C:/TDM-GCC-64/bin/windres.exe
 LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). 
 IncludePCH             := 
@@ -49,13 +49,13 @@ LibPath                := $(LibraryPathSwitch).
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := "C:/Program Files (x86)/CodeBlocks/MinGW/bin/ar.exe" rcu
-CXX      := "C:/Program Files (x86)/CodeBlocks/MinGW/bin/g++.exe"
-CC       := "C:/Program Files (x86)/CodeBlocks/MinGW/bin/gcc.exe"
+AR       := C:/TDM-GCC-64/bin/ar.exe rcu
+CXX      := C:/TDM-GCC-64/bin/g++.exe
+CC       := C:/TDM-GCC-64/bin/gcc.exe
 CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
 CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 ASFLAGS  := 
-AS       := "C:/Program Files (x86)/CodeBlocks/MinGW/bin/as.exe"
+AS       := C:/TDM-GCC-64/bin/as.exe
 
 
 ##
@@ -94,12 +94,12 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/201711140029.FACOMP/Documents/Giovani/ControleDePonto/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "C:/Users/giova/Documents/Projetos C++/PrimeiroProjeto/ControleDePonto/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
 
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix)main.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
