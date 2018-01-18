@@ -6,20 +6,6 @@ using std:: cout;
 using std:: cin;
 using std:: vector;
 
-int gerar_cod (); //Gerar ID de identificação
-void cadastro(struct usuario*); //cadastro dos dados do usuário
-void entrada_de_dados (struct usuario*); // entrada dos dados do usuário
-int calc_tempo_manha (int,struct usuario*); //cálculo do tempo trabalhado de manhã
-int calc_atraso_manha (int, struct usuario*); //cálculo do atraso de manhã
-int min_entrada_manha (int, struct usuario*); //conversão da hora de entrada da manhã em minutos
-int min_saida_manha (int, struct usuario*); //conversão da hora de saída da manhã em minutos
-int calc_tempo_tarde (int, struct usuario*); //cálculo do tempo trabalhado de tarde
-int calc_atraso_tarde (int, struct usuario*); //cálculo do atraso de tarde
-int min_entrada_tarde (int, struct usuario*); //conversão da hora de entrada da tarde em minutos
-int min_saida_tarde (int, struct usuario*); //conversão da hora de saída da tarde em minutos
-void calculo (int &, int &, double &, double &, struct usuario*); // cálculo total de horas
-void impressao (int &, int &, double &, double &, struct usuario*); //impressão dos dados na tela
-
 struct cartao_de_ponto
 {
     int dia; //Dia
@@ -40,56 +26,83 @@ struct usuario
 };
 
 bool teste;
+int cod;
 int cont = 0;
+
+int gerar_cod (); //Gerar ID de identificação
+void atribuir_endereco(vector< usuario* > &); 
+void cadastro(vector< usuario* > &); //cadastro dos dados do usuário
+void entrada_de_dados (vector< usuario* > &); // entrada dos dados do usuário
+int calc_tempo_manha (int, vector< usuario* > &); //cálculo do tempo trabalhado de manhã
+int calc_atraso_manha (int, vector< usuario* > &); //cálculo do atraso de manhã
+int min_entrada_manha (int, vector< usuario* > &); //conversão da hora de entrada da manhã em minutos
+int min_saida_manha (int, vector< usuario* > &); //conversão da hora de saída da manhã em minutos
+int calc_tempo_tarde (int, vector< usuario* > &); //cálculo do tempo trabalhado de tarde
+int calc_atraso_tarde (int, vector< usuario* > &); //cálculo do atraso de tarde
+int min_entrada_tarde (int, vector< usuario* > &); //conversão da hora de entrada da tarde em minutos
+int min_saida_tarde (int, vector< usuario* > &); //conversão da hora de saída da tarde em minutos
+void calculo (int &, int &, double &, double &, vector< usuario* > &); // cálculo total de horas
+void impressao (int &, int &, double &, double &, vector< usuario* > &); //impressão dos dados na tela
 
 int main(int argc, char **argv)
 {        
-    int total_horas_mes;
-    int total_atrasos_mes;
+    int total_horas_mes = 0;
+    int total_atrasos_mes = 0;
     double media_horas;
     double media_atrasos;
     
     cout << "Ol" << (char)160 << "! Bem-vindo(a) ao M" << (char)162 << "dulo de controle de ponto do Fab Lab Bel" << (char)130 << "m (Vers" << (char)132 << "o 1.0)\n\n";
     
-    vector < usuario *> fab (20);
+    vector < struct usuario * > fabber (20);
     
-    int cod = gerar_cod();
+    atribuir_endereco(fabber);
+    
+    cod = gerar_cod();
     
     cout << "C" << (char)162 << "digo atribuido: fab[" << cod << "]\n\n";
+ 
+    cadastro (fabber);
     
-    cadastro (fab[cod]);
+    entrada_de_dados (fabber);
     
-    entrada_de_dados (fab[cod]);
+    calculo (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fabber);
     
-    calculo (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fab[cod]);
-    
-    impressao (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fab[cod]);
+    impressao (total_horas_mes, total_atrasos_mes, media_horas, media_atrasos, fabber);
 
     return 0;
 }
 
 int gerar_cod ()
 {
-    static int ID = 1;
+    static int ID = 0;
     return ID++;
 }
 
-void cadastro (struct usuario *user)
+void atribuir_endereco (vector< usuario* > &user)
+{
+    static usuario fab [20];
+        for (int i = 0; i < 20; i++)
+    {
+        user[i] = &fab[i];
+    }
+}
+
+void cadastro (vector< usuario* > &user)
 {
     cout << "Insira o nome do(a) voluntario(a): ";
-    cin >> user->nome;
+    cin >> user[cod]->nome;
     cout << "\n";
     
     cout << "Insira o sobrenome do(a) voluntario(a): ";
-    cin >> user->sobrenome;
+    cin >> user[cod]->sobrenome;
     cout << "\n";
     
     cout << "Diretoria onde atua: ";
-    cin >> user->diretoria;
+    cin >> user[cod]->diretoria;
     cout << "\n";
 }
 
-void entrada_de_dados (struct usuario *user)
+void entrada_de_dados (vector< usuario* > &user)
 {
     teste = false;
     
@@ -105,15 +118,15 @@ void entrada_de_dados (struct usuario *user)
         {
             teste = true;
             
-            cin >> user->cartao[cont].dia;
+            cin >> user[cod]->cartao[cont].dia;
             
-            if ( user->cartao[cont].dia < 1 )
+            if ( user[cod]->cartao[cont].dia < 1 )
                 {
                     teste = false;
                     
                     cout << "Data inv" << (char)160 << "lida. Insira o dia do cart" << (char)132 << "o de ponto: ";
                 }
-                else if ( user->cartao[cont].dia > 31 )
+                else if ( user[cod]->cartao[cont].dia > 31 )
                 {
                     teste = false;
                     
@@ -122,17 +135,17 @@ void entrada_de_dados (struct usuario *user)
 
         }
 
-        cout << "Hor" << (char)160 << "rio de entrada da manh" << (char)132 << " (DIA " << user->cartao[cont].dia <<"): ";
-        cin >> user->cartao[cont].entrada_manha;
+        cout << "Hor" << (char)160 << "rio de entrada da manh" << (char)132 << " (DIA " << user[cod]->cartao[cont].dia <<"): ";
+        cin >> user[cod]->cartao[cont].entrada_manha;
         
-        cout << "Hor" << (char)160 << "rio de saida da manh" << (char)132 << " (DIA " << user->cartao[cont].dia <<"): ";
-        cin >> user->cartao[cont].saida_manha;
+        cout << "Hor" << (char)160 << "rio de saida da manh" << (char)132 << " (DIA " << user[cod]->cartao[cont].dia <<"): ";
+        cin >> user[cod]->cartao[cont].saida_manha;
         
-        cout << "Hor" << (char)160 << "rio de entrada da tarde (DIA " << user->cartao[cont].dia <<"): ";
-        cin >> user->cartao[cont].entrada_tarde;
+        cout << "Hor" << (char)160 << "rio de entrada da tarde (DIA " << user[cod]->cartao[cont].dia <<"): ";
+        cin >> user[cod]->cartao[cont].entrada_tarde;
         
-        cout << "Hor" << (char)160 << "rio de saida da tarde (DIA " << user->cartao[cont].dia <<"): ";
-        cin >> user->cartao[cont].saida_tarde;
+        cout << "Hor" << (char)160 << "rio de saida da tarde (DIA " << user[cod]->cartao[cont].dia <<"): ";
+        cin >> user[cod]->cartao[cont].saida_tarde;
         
         cout << "Deseja entrar com uma nova data? ( S / N )";
         cin >> escolha;
@@ -163,7 +176,7 @@ void entrada_de_dados (struct usuario *user)
     }
 }
 
-int calc_tempo_manha (int i, struct usuario *user)
+int calc_tempo_manha (int i, vector< usuario* > &user)
 {
     int me;
     int ms;
@@ -173,29 +186,29 @@ int calc_tempo_manha (int i, struct usuario *user)
     return ms - me;
 }
 
-int calc_atraso_manha (int i, struct usuario *user)
+int calc_atraso_manha (int i, vector< usuario* > &user)
 {
     int me;
     
     me = min_entrada_manha (i, user);
-    if ( me > 480 )
+    if ( me > 540 )
     {
-       return me - 480;
+       return me - 540;
     }
     else return 0;
 }
 
-int min_entrada_manha (int i, struct usuario *user)
+int min_entrada_manha (int i, vector< usuario* > &user)
 {
-    return ( user->cartao[i].entrada_manha / 100 ) * 60 + ( user->cartao[i].entrada_manha % 100 );
+    return ( user[cod]->cartao[i].entrada_manha / 100 ) * 60 + ( user[cod]->cartao[i].entrada_manha % 100 );
 }
 
-int min_saida_manha (int i, struct usuario *user)
+int min_saida_manha (int i, vector< usuario* > &user)
 {
-    return ( user->cartao[i].saida_manha / 100 ) * 60 + ( user->cartao[i].saida_manha % 100 );
+    return ( user[cod]->cartao[i].saida_manha / 100 ) * 60 + ( user[cod]->cartao[i].saida_manha % 100 );
 }
 
-int calc_tempo_tarde (int i, struct usuario *user)
+int calc_tempo_tarde (int i, vector< usuario* > &user)
 {
     int me;
     int ms;
@@ -205,7 +218,7 @@ int calc_tempo_tarde (int i, struct usuario *user)
     return ms - me;
 }
 
-int calc_atraso_tarde (int i, struct usuario *user)
+int calc_atraso_tarde (int i, vector< usuario* > &user)
 {
     int me;
     
@@ -217,18 +230,17 @@ int calc_atraso_tarde (int i, struct usuario *user)
     else return 0;
 }
 
-int min_entrada_tarde (int i, struct usuario *user)
+int min_entrada_tarde (int i, vector< usuario* > &user)
 {
-    return ( user->cartao[i].entrada_tarde / 100 ) * 60 + ( user->cartao[i].entrada_tarde % 100 );
+    return ( user[cod]->cartao[i].entrada_tarde / 100 ) * 60 + ( user[cod]->cartao[i].entrada_tarde % 100 );
 }
 
-int min_saida_tarde (int i, struct usuario *user)
+int min_saida_tarde (int i, vector< usuario* > &user)
 {
-    return ( user->cartao[i].saida_tarde / 100 ) * 60 + ( user->cartao[i].saida_tarde % 100 );
+    return ( user[cod]->cartao[i].saida_tarde / 100 ) * 60 + ( user[cod]->cartao[i].saida_tarde % 100 );
 }
 
-
-void calculo (int &total_h, int &total_a, double &media_h, double &media_a, struct usuario *user)
+void calculo (int &total_h, int &total_a, double &media_h, double &media_a, vector< usuario* > &user)
 {
     int atraso_manha;
     int atraso_tarde;
@@ -242,62 +254,62 @@ void calculo (int &total_h, int &total_a, double &media_h, double &media_a, stru
         atraso_manha = calc_atraso_manha (i, user);
         atraso_tarde = calc_atraso_tarde (i, user);         
         
-        user->cartao[i].total_horas_dia = horas_manha + horas_tarde;
-        user->cartao[i].total_atraso_dia = atraso_manha + atraso_tarde;
+        user[cod]->cartao[i].total_horas_dia = horas_manha + horas_tarde;
+        user[cod]->cartao[i].total_atraso_dia = atraso_manha + atraso_tarde;
 
-        total_h += user->cartao[i].total_horas_dia;
-        total_a += user->cartao[i].total_atraso_dia;
+        total_h += user[cod]->cartao[i].total_horas_dia;
+        total_a += user[cod]->cartao[i].total_atraso_dia;
     }
 
     media_h = total_h / cont;
     media_a = total_a / cont;
 }
 
-void impressao (int &total_h, int &total_a, double &media_h, double &media_a, struct usuario *user)
+void impressao (int &total_h, int &total_a, double &media_h, double &media_a, vector< usuario* > &user)
 {
     cout << "\nRELAT" << (char)224 << "RIO DE PONTO DO M" << (char)210 << "S \n";
-    cout << "Nome: " << user->nome << " " << user->sobrenome << "\n";
-    cout << "Diretoria: " << user->diretoria << "\n\n";
+    cout << "Nome: " << user[cod]->nome << " " << user[cod]->sobrenome << "\n";
+    cout << "Diretoria: " << user[cod]->diretoria << "\n\n";
     
     for ( int i = 1; i < cont+1; i++ )
     {
-        cout << "DIA " << user->cartao[i].dia << "\n";
+        cout << "DIA " << user[cod]->cartao[i].dia << "\n";
         
-        if (( user->cartao[i].entrada_manha % 100) < 9)
+        if (( user[cod]->cartao[i].entrada_manha % 100) < 9)
         {
-            cout << "Entrada Manh" << (char)132 << ": " << (user->cartao[i].entrada_manha / 100) << ":0" << (user->cartao[i].entrada_manha % 100) << "\n";
+            cout << "Entrada Manh" << (char)132 << ": " << (user[cod]->cartao[i].entrada_manha / 100) << ":0" << (user[cod]->cartao[i].entrada_manha % 100) << "\n";
         }
-        else cout << "Entrada Manh" << (char)132 << ": " << (user->cartao[i].entrada_manha / 100) << ":" << (user->cartao[i].entrada_manha % 100) << "\n";    
+        else cout << "Entrada Manh" << (char)132 << ": " << (user[cod]->cartao[i].entrada_manha / 100) << ":" << (user[cod]->cartao[i].entrada_manha % 100) << "\n";    
             
-        if ((user->cartao[i].saida_manha % 100) < 10)
+        if ((user[cod]->cartao[i].saida_manha % 100) < 10)
         {
-            cout << "Saida Manh" << (char)132 << ": " << (user->cartao[i].saida_manha / 100) << ":0" << (user->cartao[i].saida_manha % 100) << "\n";
+            cout << "Saida Manh" << (char)132 << ": " << (user[cod]->cartao[i].saida_manha / 100) << ":0" << (user[cod]->cartao[i].saida_manha % 100) << "\n";
         }
-        else cout << "Saida Manh" << (char)132 << ": " << (user->cartao[i].saida_manha / 100) << ":" << (user->cartao[i].saida_manha % 100) << "\n";
+        else cout << "Saida Manh" << (char)132 << ": " << (user[cod]->cartao[i].saida_manha / 100) << ":" << (user[cod]->cartao[i].saida_manha % 100) << "\n";
         
-        if ((user->cartao[i].entrada_tarde % 100) < 10)
+        if ((user[cod]->cartao[i].entrada_tarde % 100) < 10)
         {
-            cout << "Entrada Tarde: " << (user->cartao[i].entrada_tarde / 100) << ":0" << (user->cartao[i].entrada_tarde % 100) << "\n";
+            cout << "Entrada Tarde: " << (user[cod]->cartao[i].entrada_tarde / 100) << ":0" << (user[cod]->cartao[i].entrada_tarde % 100) << "\n";
         }
-        else cout << "Entrada Tarde: " << (user->cartao[i].entrada_tarde / 100) << ":" << (user->cartao[i].entrada_tarde % 100) << "\n";    
+        else cout << "Entrada Tarde: " << (user[cod]->cartao[i].entrada_tarde / 100) << ":" << (user[cod]->cartao[i].entrada_tarde % 100) << "\n";    
         
-        if ((user->cartao[i].saida_tarde % 100) < 10)
+        if ((user[cod]->cartao[i].saida_tarde % 100) < 10)
         {
-            cout << "Saida Tarde: " << (user->cartao[i].saida_tarde / 100) << ":0" << (user->cartao[i].saida_tarde % 100) << "\n";
+            cout << "Saida Tarde: " << (user[cod]->cartao[i].saida_tarde / 100) << ":0" << (user[cod]->cartao[i].saida_tarde % 100) << "\n";
         }
-        else cout << "Saida Tarde: " << (user->cartao[i].saida_tarde / 100) << ":" << (user->cartao[i].saida_tarde % 100) << "\n";
+        else cout << "Saida Tarde: " << (user[cod]->cartao[i].saida_tarde / 100) << ":" << (user[cod]->cartao[i].saida_tarde % 100) << "\n";
                 
-        if ((user->cartao[i].total_horas_dia % 60) < 10)
+        if ((user[cod]->cartao[i].total_horas_dia % 60) < 10)
         {
-            cout << "Total de horas trabalhadas no dia: " << ((user->cartao[i].total_horas_dia) / 60) << "h0" << ((user->cartao[i].total_horas_dia) % 60) << "min" << "\n";
+            cout << "Total de horas trabalhadas no dia: " << ((user[cod]->cartao[i].total_horas_dia) / 60) << "h0" << ((user[cod]->cartao[i].total_horas_dia) % 60) << "min" << "\n";
         }
-        else cout << "Total de horas trabalhadas no dia: " << ((user->cartao[i].total_horas_dia) / 60) << "h" << ((user->cartao[i].total_horas_dia) % 60) << "min" << "\n";
+        else cout << "Total de horas trabalhadas no dia: " << ((user[cod]->cartao[i].total_horas_dia) / 60) << "h" << ((user[cod]->cartao[i].total_horas_dia) % 60) << "min" << "\n";
         
-        if ((user->cartao[i].total_atraso_dia % 60) < 10)
+        if ((user[cod]->cartao[i].total_atraso_dia % 60) < 10)
         {
-            cout << "Tempo de atraso no dia: " << ((user->cartao[i].total_atraso_dia) / 60) << "h0" << ((user->cartao[i].total_atraso_dia) % 60) << "min" << "\n";
+            cout << "Tempo de atraso no dia: " << ((user[cod]->cartao[i].total_atraso_dia) / 60) << "h0" << ((user[cod]->cartao[i].total_atraso_dia) % 60) << "min" << "\n";
         }
-        else cout << "Tempo de atraso no dia: " << ((user->cartao[i].total_atraso_dia) / 60) << "h" << ((user->cartao[i].total_atraso_dia) % 60) << "min" << "\n";
+        else cout << "Tempo de atraso no dia: " << ((user[cod]->cartao[i].total_atraso_dia) / 60) << "h" << ((user[cod]->cartao[i].total_atraso_dia) % 60) << "min" << "\n";
     }
 
     cout << "\n\n";
