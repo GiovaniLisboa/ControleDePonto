@@ -8,13 +8,13 @@ using std:: vector;
 
 struct cartao_de_ponto
 {
-    int dia; //Dia
-    int entrada_manha; // Horário de entrada da manhã
+    int dia; //Dia do cartao
+    int entrada_manha; //Horário de entrada da manhã
     int saida_manha; //Horário de saída da manhã
     int entrada_tarde; //Horário de entrada da tarde
     int saida_tarde; //Horário de saída da tarde
-    int total_horas_dia;
-    int total_atraso_dia;
+    int total_horas_dia; //Total de tempo trabalhado no dia
+    int total_atraso_dia; //Total de tempo de atraso no dia
 };
 
 struct usuario
@@ -30,9 +30,9 @@ int cod;
 int cont = 0;
 
 int gerar_cod (); //Gerar ID de identificação
-void atribuir_endereco(vector< usuario* > &); 
+void atribuir_endereco(vector< usuario* > &); //Atribui cada posição do vetor a um ponteiro do vector 
 void cadastro(vector< usuario* > &); //cadastro dos dados do usuário
-void entrada_de_dados (vector< usuario* > &); // entrada dos dados do usuário
+void entrada_de_dados (vector< usuario* > &); // entrada dos dados do cartao do usuário
 int calc_tempo_manha (int, vector< usuario* > &); //cálculo do tempo trabalhado de manhã
 int calc_atraso_manha (int, vector< usuario* > &); //cálculo do atraso de manhã
 int min_entrada_manha (int, vector< usuario* > &); //conversão da hora de entrada da manhã em minutos
